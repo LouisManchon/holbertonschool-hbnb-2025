@@ -1,6 +1,6 @@
 from app.models.baseModel import BaseModel
 from app.persistence.repository import InMemoryRepository
-from app.models.users import User
+from app.models.user import User
 from app.models.place import Place
 '''
 Place class inherite of base model and is linked to one place_owner
@@ -92,7 +92,14 @@ class Review(BaseModel):
             self._user = user.id
 
     def to_dict(self):
-        return {'text': self._text, 'rating': self._rating, 'place': self._place, 'user': self.user}
+        return {
+        'id': self.id,
+        'text': self._text,  # ou self._text si tu as un getter
+        'rating': self._rating,
+        'place': self._place.id if hasattr(self.place, 'id') else str(self.place),
+        'user': self._user.id if hasattr(self.user, 'id') else str(self.user)
+    }
+
 
     def __str__(self):
         return "{}".format(self.text)
