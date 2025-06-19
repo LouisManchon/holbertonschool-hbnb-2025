@@ -5,7 +5,7 @@ from app.models.baseModel import BaseModel
 
 
 class Place(BaseModel):
-    def __init__(self, title, price, latitude, longitude, owner, description=""):
+    def __init__(self, title, price, latitude, longitude, owner, description="", amenities=[], reviews={}):
 
         super().__init__()
 
@@ -84,6 +84,20 @@ class Place(BaseModel):
             'email': self.owner.email
         } if self.owner else None,
         'amenities': [
-            {'id': a.id, 'name': a.name} for a in self.amenities
-        ] if self.amenities else []
+            {
+                'id': amenity.id,
+                'name': amenity.name
+            } for amenity in self.amenities
+        ]
+    }
+
+    def to_bibl(self):
+        return {
+        'id': self.id,
+        'title': self.title,
+        'price': self.price,
+        'description': self.description,
+        'latitude': self.latitude,
+        'longitude': self.longitude,
+        'owner_id': self.owner.id
     }
